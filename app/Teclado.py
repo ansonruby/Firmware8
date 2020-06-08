@@ -12,6 +12,7 @@ import sys
 import time
 
 import lib.Control_Archivos2  as Ca
+import lib.Control_Ethernet
 
 #-----------------------------------
 #           Definiciones
@@ -22,9 +23,13 @@ Escrivir_Estados         = Ca.Escrivir_Estados
 Escrivir                 = Ca.Escrivir_Archivo
 Leer_Estado              = Ca.Leer_Estado
 
+Serial                  = lib.Control_Ethernet.ID_Tarjeta
+
 #-----------------------------------
 #    Variables de configuracion
 #-----------------------------------
+Estado_Informacion = 0
+Contador_vista_Inf=0
 
 operator= ""
 Texto_Display= ""
@@ -55,6 +60,59 @@ SCREEN_HEIGHT = 480
 # ------------------------------
 # Clases y Funciones utilizadas
 # ------------------------------
+
+def imprimir_texto(screen, texto, x, y, color, fuente):
+
+    pygame.draw.rect(screen,(32,112,164), (x,y-10, 245, 250))
+
+    
+    fuente = pygame.font.SysFont("Arial", 20)
+ 
+        
+    # separa el texto en elementos de una lista
+    # ejemplo: convierte "hola \n mundo" en ["hola ", " mundo"
+    texto_en_lineas = texto.split('\n')
+
+    # un bucle que itera por cada una de las lineas del texto
+    for linea in texto_en_lineas:
+        nueva = fuente.render(linea, 1, color)
+
+        # imprime en pantalla (se debe ejecutar pygame.display.flip() luego
+        screen.blit(nueva, (x, y))
+
+        # reduce la altura de la coordenada vertical, para luego volver
+        # a imprimir la siguiente linea de texto mas abajo
+        y += nueva.get_height()
+    
+    fuente = pygame.font.SysFont("Arial", 40)
+        
+def Inf_Dispositivo():
+        Inf =''
+        
+        Inf +='              Nombre\n'
+        Inf += commands.getoutput('hostname')
+        Inf +='\n'
+        
+        Inf +='              Serial\n'
+        Inf +=Serial[0:12]+'xxx'+Serial[12+12:12+12+6]
+        Inf +='\n'
+        
+        Inf +='              Conexion\n'
+        IPs = commands.getoutput('hostname -I')
+        texto_en_lineas = IPs.split(' ')
+        
+        for linea in texto_en_lineas:
+            if len(linea)>=3:
+                Inf +='IP: '
+                Inf +=linea
+                Inf +='\n'
+        #print res2
+        #print Serial
+        
+
+        #print Inf
+        return Inf
+
 
 def Estatus_Coneccion (c):
         res2 = commands.getoutput('cat /sys/class/net/'+c+'/carrier')
@@ -122,6 +180,15 @@ def clickbut(number): # teclas de 0-9 y k
     global Texto_Display
     global Memoria
     global Tamano
+    global Estado_Informacion
+
+    #print Contador_Menu
+    #print number
+    if Contador_Menu == 3:# Numero de borrados
+            if number == 1: #Digito teclado
+                    Estado_Informacion = 1
+                    #print Estado_Informacion
+                    print 'ver informacion dispositivo'
      
     Contador_Menu=0
 
@@ -158,6 +225,8 @@ def equlbut():  #para el boton k
      global Contador_Menu
      global Texto_Display
      global Memoria
+
+ 
 
      Contador_Menu=0
 
@@ -202,7 +271,9 @@ def clrbut(): #para el boton c borrar
         Memoria=Memoria[N_Teclas-Tamano:N_Teclas+1]
         
     Texto_Display = Memoria
-     
+
+    print Contador_Menu
+
     if Contador_Menu == 5:# numero de veces para activar la configuracion wifi          
         Contador_Menu = 0
 
@@ -224,6 +295,8 @@ def main():
     global Contador_vista
     global Antes_Conectividad
     global Divicion
+    global Estado_Informacion
+    global Contador_vista_Inf
     
     Esta_QR_Repetido = 0
     retraso=0 
@@ -351,6 +424,18 @@ def main():
                 Conectividad = Estados_Internet()
                 Divicion = int (Conectividad[0])
                 Contador_vista = 0
+
+        
+
+
+        if Estado_Informacion == 1:
+                Contador_vista_Inf = Contador_vista_Inf+1
+                #print 'informaccion cual'
+                imprimir_texto(screen,Inf_Dispositivo(), 40, 70, (0,0,0), fuente)
+                if Contador_vista_Inf >= 30:
+                    Contador_vista_Inf = 0
+                    Estado_Informacion = 0
+                    
 
         #--------------------------------------------------
         # se muestran lo cambios en pantalla

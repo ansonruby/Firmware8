@@ -289,10 +289,53 @@ def Etapa_2():
 
 def Etapa_3():
     Log_Actualizador('3. Verificar repositorio MD5 o listado de lo que viene')
+
+    res = commands.getoutput('[ -d /home/pi/Actualizador/Nueva_Actualizacion ] && echo "Existe" || echo "NO_existe"')
+    print 'Nueva_Actualizacion:'+res
+    if res == 'NO_existe':
+            print "No Nueva_Actualizacion"
+            Log_Actualizador('3. Verificar repositorio, Error No hay Carpeta Nueva_Actualizacion')
+            Escrivir_Estados('4',20)
+            commands.getoutput('sudo reboot') 
+    res = commands.getoutput('[ -d /home/pi/Actualizador/Nueva_Actualizacion/Actualizador ] && echo "Existe" || echo "NO_existe"')
+    print 'Actualizador:'+res
+    if res == 'NO_existe':
+            print "No Actualizador"
+            Log_Actualizador('3. Verificar repositorio, Error No hay Carpeta Actualizador')
+            Escrivir_Estados('4',20)
+            commands.getoutput('sudo reboot') 
+    res = commands.getoutput('[ -d /home/pi/Actualizador/Nueva_Actualizacion/app ] && echo "Existe" || echo "NO_existe"')
+    print 'app:'+res
+    if res == 'NO_existe':
+            print "No app"
+            Log_Actualizador('3. Verificar repositorio, Error No hay Carpeta app')
+            Escrivir_Estados('4',20)
+            commands.getoutput('sudo reboot') 
+    res = commands.getoutput('[ -d /home/pi/Actualizador/Nueva_Actualizacion/auto ] && echo "Existe" || echo "NO_existe"')
+    print 'auto:'+res
+    if res == 'NO_existe':
+            print "No auto"
+            Log_Actualizador('3. Verificar repositorio, Error No hay Carpeta auto')
+            Escrivir_Estados('4',20)
+            commands.getoutput('sudo reboot') 
+    res = commands.getoutput('[ -d /home/pi/Actualizador/Nueva_Actualizacion/img ] && echo "Existe" || echo "NO_existe"')
+    print 'img:'+res
+    if res == 'NO_existe':
+            print "No img"
+            Log_Actualizador('3. Verificar repositorio, Error No hay Carpeta img')
+            Escrivir_Estados('4',20)
+            commands.getoutput('sudo reboot') 
+    res = commands.getoutput('[ -d /home/pi/Actualizador/Nueva_Actualizacion/sh ] && echo "Existe" || echo "NO_existe"')
+    print 'sh:'+res
+    if res == 'NO_existe':
+            print "No sh"
+            Log_Actualizador('3. Verificar repositorio, Error No hay Carpeta sh')
+            Escrivir_Estados('4',20)
+            commands.getoutput('sudo reboot') 
     
     res = 'No implementado'
     print res
-
+    
 def Etapa_4():
     global Direccion_Firmware
     global Nombre_Carpeta_Firmware

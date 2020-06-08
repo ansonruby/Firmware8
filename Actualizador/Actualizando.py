@@ -73,8 +73,8 @@ def main():
     pygame.init()
 
     # Tamano de la ventana
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    #screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
+    #screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
     pygame.display.set_caption("Actualizador")
 
     # cargamos el fondo y una imagen (se crea objetos "Surface")

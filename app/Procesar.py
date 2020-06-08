@@ -273,16 +273,19 @@ def Ping_Intento_Enviar_Usuarios_Autotizados():
 def Decision_Torniquete (Res, QR, ID2, Ti,Qr_Te, I_N_S ):
 
     global Estados
+
     
+    #print Qr_Te
+    #print ID2
     if Qr_Te == '1'	:	Co = QR+'.'             #QR
-    if Qr_Te == '2'	:	Co = QR+'.'+ID2+'.'     #PIN
+    elif Qr_Te == '2'	:	Co = QR+'.'+ID2+'.'     #PIN
     else :
         if ID2 != -1	:	Co = QR+'.'+ID2+'.'     #RUT
         else		:	Co=''
-    
+    #print Co
     Res=Res.rstrip('\n')#se coloca para pruebas
     Res=Res.rstrip('\r')#se coloca para pruebas
-    #print Res
+    #c
     if Res == 'Access granted-E':
         print "Entrada, estado 3"
         if Direc_Torniquete == 'D':
@@ -291,10 +294,12 @@ def Decision_Torniquete (Res, QR, ID2, Ti,Qr_Te, I_N_S ):
         else :
             Cambio_Estado_Led('3')
             Entrar()
-
+        #print Co
+        #print Ti
+        print Co+Ti+'.'+Qr_Te+'.0.'+I_N_S
         Escrivir(Co+Ti+'.'+Qr_Te+'.0.'+I_N_S)               #guardar un registro
         Escrivir_Archivo(Co+Ti+'.'+Qr_Te+'.0.'+I_N_S, 22)   #Para dispotivos asociados
-        Escrivir_Archivo(Co+Ti+'.'+Qr_Te+'.0.'+I_N_S, 27)   #escrivir pin usado
+        if Qr_Te == '2':        Escrivir_Archivo(Co+Ti+'.'+Qr_Te+'.0.'+I_N_S, 27)   #escrivir pin usado
         if I_N_S == '1':	Escrivir_Enviar(Co+Ti+'.'+Qr_Te+'.0.'+I_N_S)
 
         Cambio_Estado_Led('0')  #volver a estado de inicio
@@ -309,9 +314,12 @@ def Decision_Torniquete (Res, QR, ID2, Ti,Qr_Te, I_N_S ):
             Cambio_Estado_Led('4')
             Salir()
 
+        #print Co
+        #print Ti
+        print Co+Ti+'.'+Qr_Te+'.0.'+I_N_S
         Escrivir(Co+Ti+'.'+Qr_Te+'.1.'+I_N_S)               #guardar un registro
         Escrivir_Archivo(Co+Ti+'.'+Qr_Te+'.1.'+I_N_S, 22)   #Para dispotivos asociados
-        Escrivir_Archivo(Co+Ti+'.'+Qr_Te+'.1.'+I_N_S, 27)   #escrivir pin usado
+        if Qr_Te == '2':        Escrivir_Archivo(Co+Ti+'.'+Qr_Te+'.1.'+I_N_S, 27)   #escrivir pin usado
         if I_N_S == '1':	Escrivir_Enviar(Co+Ti+'.'+Qr_Te+'.1.'+I_N_S)
 
         Cambio_Estado_Led('0')  #volver a estado de inicio
@@ -443,6 +451,7 @@ def Decision(QR_RUT):
     else: # QR
         Escrivir_Estados('1',6)# activar sonido por 500*2
         R_Q = Get_QR_RUT('QR')
+        #print R_Q
         s =R_Q.partition(".")
         QRT = s[0]
         IDQ = s[2]
@@ -672,7 +681,7 @@ while 1:
     #---------------------------------------------------------
     # Proceso 2: Actualizacion de usuarios para revicion de usuarios sin internet
     #---------------------------------------------------------
-    Actualizar_Usuarios("12:10 AM") # 12:00 AM     03:59 PM # hora chile  10:00 PM
+    Actualizar_Usuarios("12:10 AM") # 12:00 AM     03:59 PM # hora chile  10:00 PM 12:10 AM
 
     #---------------------------------------------------------
     # Proceso 3: Procesamiento del PIN

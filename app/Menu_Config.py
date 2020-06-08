@@ -81,7 +81,7 @@ DYip=10#2 #5
 
 # posicion de botones ipstatica
 Ini_xip=25
-Ini_yip=95
+Ini_yip=115
 Disxip=90#52
 Disyip=60#35#39
 
@@ -125,6 +125,72 @@ def Escrivir_Archivo(Texto,a):
         archivo.write(Texto + "\n")
         #print(archivo.tell())
         archivo.close()
+
+
+def Modificar_Archivo1(a,we):
+        
+        global N_A_wifi
+        global N_A_IP_Static
+
+        contador =0
+        #we =2
+        
+        if a==0:	arch	=	N_A_wifi
+        if a==1:	arch	=	N_A_IP_Static
+
+        f = open (arch,'r')
+        lineas = f.readlines()
+        f.close()
+        
+        x=0
+        T_fichero = len(lineas)
+        print T_fichero
+        print a
+
+        f = open (arch,'w')
+        for linea in lineas:
+                
+                if (linea[0]!='#') and (len(linea)>=4):
+                        if (linea.find('interface')!=-1) or (linea.find('static')!=-1):
+                                if (linea.find('option')==-1):
+                                        if (linea.find('eth0')!=-1):
+                                                contador =0
+                                                wec = 1
+                                                
+                                        if (linea.find('wlan0')!=-1):
+                                                contador =0
+                                                wec = 0
+
+                                        if contador>=0 and contador <=3:
+                                                if we == wec:
+                                                        print 'Eli: '+str(contador) + linea
+                                                else:
+                                                        #print str(contador) + linea
+                                                        f.write(linea)
+                                        contador =contador + 1
+
+                                else:
+                                        #print str(contador) + linea
+                                        f.write(linea)
+                        else:
+                                #print str(contador) + linea
+                                f.write(linea)
+                else:
+                        #print str(contador) + linea
+                        f.write(linea)
+
+        
+        print 'colocando las ip statica'
+        if we==0:
+                f.write('interface wlan0'+'\n')
+        else:
+                f.write('interface eth0'+'\n')
+                
+        f.write('static ip_address='+ str(IP.get())+'\n')
+        f.write('static routers='+ str(Gateway.get())+'\n')
+        f.write('static domain_name_servers='+ str(Gateway.get())+'\n')
+        
+        f.close()
 
 
 def Modificar_Archivo(a):
@@ -565,29 +631,31 @@ def V_IP():
 def ver_IP_Static():
         
         L_Ip_Static.place(bordermode=OUTSIDE, height=20, width=100, y=10, x= 115)
-        L_Ip.place(bordermode=OUTSIDE, height=20, width=100, y=60)
-        L_Gat.place(bordermode=OUTSIDE, height=20, width=100, y=100)
-        IP.place(bordermode=OUTSIDE, height=30, width=200, x=90, y=50)
-        Gateway.place(bordermode=OUTSIDE, height=30, width=200, x=90, y=90)
+        L_Ip_Static_lista.place(bordermode=OUTSIDE, height=29, width=200, x=60, y=40)
+        L_Ip.place(bordermode=OUTSIDE, height=20, width=100, y=80)
+        L_Gat.place(bordermode=OUTSIDE, height=20, width=100, y=130)
+        IP.place(bordermode=OUTSIDE, height=30, width=200, x=90, y=80)
+        Gateway.place(bordermode=OUTSIDE, height=30, width=200, x=90, y=120)
         
-        but1.place(x=Ini_xip+(Disxip*0), y=Ini_y+(Disyip*1))
-        but2.place(x=Ini_xip+(Disxip*1), y=Ini_y+(Disyip*1))
-        but3.place(x=Ini_xip+(Disxip*2), y=Ini_y+(Disyip*1))
-        but4.place(x=Ini_xip+(Disxip*0), y=Ini_y+(Disyip*2))
-        but5.place(x=Ini_xip+(Disxip*1), y=Ini_y+(Disyip*2))        
-        but6.place(x=Ini_xip+(Disxip*2), y=Ini_y+(Disyip*2))
-        but7.place(x=Ini_xip+(Disxip*0), y=Ini_y+(Disyip*3))
-        but8.place(x=Ini_xip+(Disxip*1), y=Ini_y+(Disyip*3))
-        but9.place(x=Ini_xip+(Disxip*2), y=Ini_y+(Disyip*3))
-        but0.place(x=Ini_xip+(Disxip*0), y=Ini_y+(Disyip*4))
-        butb.place(x=Ini_xip+(Disxip*1), y=Ini_y+(Disyip*4))
-        butp.place(x=Ini_xip+(Disxip*2), y=Ini_y+(Disyip*4))
+        but1.place(x=Ini_xip+(Disxip*0), y=Ini_yip+(Disyip*1))
+        but2.place(x=Ini_xip+(Disxip*1), y=Ini_yip+(Disyip*1))
+        but3.place(x=Ini_xip+(Disxip*2), y=Ini_yip+(Disyip*1))
+        but4.place(x=Ini_xip+(Disxip*0), y=Ini_yip+(Disyip*2))
+        but5.place(x=Ini_xip+(Disxip*1), y=Ini_yip+(Disyip*2))        
+        but6.place(x=Ini_xip+(Disxip*2), y=Ini_yip+(Disyip*2))
+        but7.place(x=Ini_xip+(Disxip*0), y=Ini_yip+(Disyip*3))
+        but8.place(x=Ini_xip+(Disxip*1), y=Ini_yip+(Disyip*3))
+        but9.place(x=Ini_xip+(Disxip*2), y=Ini_yip+(Disyip*3))
+        but0.place(x=Ini_xip+(Disxip*0), y=Ini_yip+(Disyip*4))
+        butb.place(x=Ini_xip+(Disxip*1), y=Ini_yip+(Disyip*4))
+        butp.place(x=Ini_xip+(Disxip*2), y=Ini_yip+(Disyip*4))
         Aceptar_IP.place(x=Ini_x, y=Ini_y+330)
         
 
                 
 def No_ver_IP_Static():
         L_Ip_Static.place_forget()
+        L_Ip_Static_lista.place_forget()
         L_Ip.place_forget()
         L_Gat.place_forget()
         IP.place_forget()
@@ -656,16 +724,18 @@ def verificar_IP_Static(): #esta función verifica que este correcto usuario y c
  
     Ip1=IP.get()#get es el metodo utilizado para capturar los datos de la caja de texto
     Gateway1=Gateway.get()
+    Tipo_red = L_Ip_Static_lista.get()
+    print Tipo_red
     print Ip1
     print Gateway1
 
     #Leer_Archivo(1)
     #print len(a)
-    #print len(b)
+    #print len(Tipo_red)
  
     
 
-    if (len(Ip1) == 0) or (len(Gateway1)==0):
+    if (len(Ip1) == 0) or (len(Gateway1)==0) or (len(Tipo_red)==0):
         top = Tk()
         top.geometry("+%d+%d" % (65,200))
         top.config(background='Red')
@@ -684,7 +754,11 @@ def verificar_IP_Static(): #esta función verifica que este correcto usuario y c
                 frame2.pack()
         else:
                 print 'verificar una configuracion previa y guardar la nueva' 
-                Modificar_Archivo(1)
+                #Modificar_Archivo(1)
+                if Tipo_red == "Ethernet":
+                        Modificar_Archivo1(1,1)
+                else:
+                        Modificar_Archivo1(1,0)
                 commands.getoutput('sudo reboot')
 
 
@@ -1011,7 +1085,16 @@ def Actualizar_lista2():
 
                 values = list(M_T_lista["values"])
                 M_T_lista["values"]= values+ [x1]
+
+def desplegar_IP_Static(event):
+        L_Ip_Static_lista["values"]= []
+
+        L_Ip_Static_lista["values"]= ["Ethernet","WIFI"]
         
+        
+        
+        return 0
+      
 #-----------------------------------
 #-----          Definiciones    ----
 #-----------------------------------
@@ -1037,6 +1120,8 @@ ver_menu_principal()
 #-----          Pagina Ip Static        ----
 #-------------------------------------------
 L_Ip_Static = Label(tk, font='Arial', bg='Dark gray', text="IP STATIC")
+L_Ip_Static_lista = ttk.Combobox(tk, font=Fuente2, width=15,height=16, state="readonly")
+L_Ip_Static_lista.bind("<Button-1>",desplegar_IP_Static)
 L_Ip = Label(tk, font='Arial', bg='Dark gray', text="IP: ")
 L_Gat = Label(tk, font='Arial', bg='Dark gray', text="Gateway: ")
 IP=Entry(tk, font='Arial',textvar=textin)
@@ -1225,8 +1310,10 @@ M_T_butb=Button(tk,padx=DXip-6,pady=DYip,bd=BD,bg='white',command=lambda:clickbu
 M_T_Aceptar_IP = Button(tk,padx=DX,pady=DY-10,bd=BD,command=Agregar_IP_Dispostivos,text="Agregar",font=Fuente)
 
 #Cancelar_IP = Button(tk,padx=DX,pady=DY,bd=BD,command=salir,text="Cancelar",font=Fuente)
-
-
+#Modificar_Archivo1(1,0)
+#while 1:
+#        a=0
+        
 #-----------------------------------
 #-----  Bucle principal         ----
 #-----------------------------------
